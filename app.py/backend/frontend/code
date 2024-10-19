@@ -1,0 +1,52 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function App() {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get('http://localhost:8501/api/players') // Adjust the port if necessary
+            .then(response => {
+                setData(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <div className="App">
+            <h1>Soccer Player Stats</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th>Age</th>
+                        <th>Goals</th>
+                        <th>Assists</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((player, index) => (
+                        <tr key={index}>
+                            <td>{player.Player}</td>
+                            <td>{player.Squad}</td>
+                            <td>{player.Pos}</td>
+                            <td>{player.Age}</td>
+                            <td>{player.Gls}</td>
+                            <td>{player.Ast}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+export default App;
